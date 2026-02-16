@@ -513,7 +513,7 @@ class Boss {
         this.width = 80;
         this.height = 80;
         this.targetY = 150;
-        this.health = Math.floor((20 + level * 15) * 0.6); // 40% less health!
+        this.health = Math.floor((20 + level * 15) * 0.8); // 20% less health!
         this.maxHealth = this.health;
         this.phase = 0; // 0: entering, 1: attacking, 2: desperate
         this.attackTimer = 0;
