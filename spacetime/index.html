@@ -64,10 +64,23 @@
             <h1>🚀 SPACETIME</h1>
             <p class="subtitle">A Time-Traveling Space Shooter</p>
             <p class="total-coins">💰 Total Coins: <span id="total-coins">0</span></p>
+            <div id="auth-section">
+                <div id="logged-out-view">
+                    <input type="text" id="login-username" placeholder="Username" maxlength="20">
+                    <input type="password" id="login-password" placeholder="Password" maxlength="30">
+                    <button id="login-btn">LOG IN</button>
+                    <button id="signup-btn" class="secondary-btn">SIGN UP</button>
+                </div>
+                <div id="logged-in-view" style="display: none;">
+                    <p>Welcome, <span id="current-username"></span>!</p>
+                    <button id="logout-btn">LOG OUT</button>
+                </div>
+            </div>
             <button id="start-btn">PLAY</button>
             <button id="pvp-btn">⚔️ PVP</button>
             <button id="upgrades-btn">SHIP UPGRADES</button>
             <button id="levels-btn">SELECT LEVEL</button>
+            <button id="leaderboard-btn">🏆 LEADERBOARD</button>
             <div class="controls">
                 <p><strong>WASD</strong> or <strong>Arrow Keys</strong> - Move</p>
                 <p><strong>SPACE</strong> or <strong>Click</strong> - Shoot</p>
@@ -88,6 +101,12 @@
             <p class="subtitle">You were lost in time...</p>
             <p>Waves Survived: <span id="final-wave">0</span></p>
             <p>Total Coins: <span id="final-coins">0</span></p>
+            <div id="score-submission">
+                <p id="login-prompt" style="color: #ffff00; margin-bottom: 10px;">Log in to submit your score!</p>
+                <button id="submit-score-btn" disabled>SUBMIT SCORE</button>
+                <button id="view-leaderboard-btn">🏆 VIEW LEADERBOARD</button>
+            </div>
+            <div id="score-status" style="display: none; margin-top: 10px;"></div>
             <button id="restart-btn">TRY AGAIN</button>
         </div>
 
@@ -133,6 +152,11 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="auth.js"></script>
     <script src="game.js"></script>
 </body>
 </html>

@@ -117,6 +117,110 @@ function setupEventListeners() {
     document.getElementById('pvp-btn').addEventListener('click', () => showScreen('pvp-screen'));
     document.getElementById('back-from-pvp').addEventListener('click', () => showScreen('start-screen'));
     document.getElementById('start-pvp-btn').addEventListener('click', startPvP);
+
+    // Leaderboard button
+    document.getElementById('leaderboard-btn').addEventListener('click', () => {
+        window.location.href = 'leaderboard.html';
+    });
+
+    // Auth buttons
+    document.getElementById('login-btn').addEventListener('click', handleLogin);
+    document.getElementById('signup-btn').addEventListener('click', handleSignup);
+    document.getElementById('logout-btn').addEventListener('click', handleLogout);
+
+    // Submit score button
+    document.getElementById('submit-score-btn').addEventListener('click', handleSubmitScore);
+
+    // View leaderboard button
+    document.getElementById('view-leaderboard-btn').addEventListener('click', () => {
+        window.location.href = 'leaderboard.html';
+    });
+}
+
+// Auth Handler Functions
+async function handleLogin() {
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+
+    if (!username || !password) {
+        alert('Please enter both username and password!');
+        return;
+    }
+
+    const result = await logIn(username, password);
+
+    if (result.success) {
+        // Clear inputs
+        document.getElementById('login-username').value = '';
+        document.getElementById('login-password').value = '';
+        alert('✅ ' + result.message);
+    } else {
+        alert('❌ ' + result.message);
+    }
+}
+
+async function handleSignup() {
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+
+    if (!username || !password) {
+        alert('Please enter both username and password!');
+        return;
+    }
+
+    if (username.length < 3) {
+        alert('Username must be at least 3 characters!');
+        return;
+    }
+
+    if (password.length < 6) {
+        alert('Password must be at least 6 characters!');
+        return;
+    }
+
+    const result = await signUp(username, password);
+
+    if (result.success) {
+        // Clear inputs
+        document.getElementById('login-username').value = '';
+        document.getElementById('login-password').value = '';
+        alert('✅ ' + result.message);
+    } else {
+        alert('❌ ' + result.message);
+    }
+}
+
+async function handleLogout() {
+    const result = await logOut();
+    if (result.success) {
+        alert('✅ ' + result.message);
+    } else {
+        alert('❌ ' + result.message);
+    }
+}
+
+async function handleSubmitScore() {
+    const statusDiv = document.getElementById('score-status');
+    const submitBtn = document.getElementById('submit-score-btn');
+
+    // Show loading state
+    statusDiv.style.display = 'block';
+    statusDiv.style.color = '#ffff00';
+    statusDiv.textContent = 'Submitting...';
+    submitBtn.disabled = true;
+
+    const result = await submitScore(totalCoins, wavesCompleted);
+
+    if (result.success) {
+        statusDiv.style.color = '#00ff00';
+        statusDiv.textContent = result.message;
+        submitBtn.textContent = '✅ SUBMITTED';
+        submitBtn.disabled = true;
+    } else {
+        statusDiv.style.color = '#ff0000';
+        statusDiv.textContent = result.message;
+        submitBtn.disabled = false;
+    }
 }
 
 // Player Class
@@ -891,9 +995,20 @@ function nextWave() {
 
 function gameOver() {
     gameState = 'gameover';
-    document.getElementById('final-wave').textContent = wave;
-    document.getElementById('final-coins').textContent = coins;
+    document.getElementById('final-wave').textContent = wavesCompleted;
+    document.getElementById('final-coins').textContent = totalCoins;
     showScreen('game-over-screen');
+
+    // Reset submit button state
+    const submitBtn = document.getElementById('submit-score-btn');
+    const statusDiv = document.getElementById('score-status');
+    statusDiv.style.display = 'none';
+    submitBtn.textContent = 'SUBMIT SCORE';
+
+    // Update auth UI to enable/disable submit button
+    if (typeof updateAuthUI === 'function') {
+        updateAuthUI();
+    }
 }
 
 function togglePause() {
