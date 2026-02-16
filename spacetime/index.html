@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spacetime - A Time-Traveling Space Shooter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <div id="ui-overlay">
+            <div id="hud">
+                <div class="hud-item">
+                    <span class="label">WAVE</span>
+                    <span id="wave" class="value">1</span>
+                </div>
+                <div class="hud-item">
+                    <span class="label">ERA</span>
+                    <span id="era" class="value">2024</span>
+                </div>
+                <div class="hud-item">
+                    <span class="label">COINS</span>
+                    <span id="coins" class="value">0</span>
+                </div>
+                <div class="hud-item">
+                    <span class="label">P1 HEALTH</span>
+                    <div id="health-bar">
+                        <div id="health-fill"></div>
+                    </div>
+                </div>
+                <div class="hud-item" id="p2-health-container" style="display: none;">
+                    <span class="label">P2 HEALTH</span>
+                    <div id="health-bar-2">
+                        <div id="health-fill-2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pvp-controls-display" style="display: none;">
+                <div class="pvp-controls-hud">
+                    <div class="pvp-control-box p1-controls">
+                        <span class="control-title">PLAYER 1</span>
+                        <span class="control-row">⬆️ W - Forward</span>
+                        <span class="control-row">⬇️ S - Backward</span>
+                        <span class="control-row">⬅️ A - Rotate Left</span>
+                        <span class="control-row">➡️ D - Rotate Right</span>
+                        <span class="control-row">🔫 SPACE - Shoot</span>
+                    </div>
+                    <div class="pvp-control-box p2-controls">
+                        <span class="control-title">PLAYER 2</span>
+                        <span class="control-row">⬆️ I - Forward</span>
+                        <span class="control-row">⬇️ K - Backward</span>
+                        <span class="control-row">⬅️ J - Rotate Left</span>
+                        <span class="control-row">➡️ L - Rotate Right</span>
+                        <span class="control-row">🔫 ; - Shoot</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="start-screen" class="screen">
+            <h1>🚀 SPACETIME</h1>
+            <p class="subtitle">A Time-Traveling Space Shooter</p>
+            <p class="total-coins">💰 Total Coins: <span id="total-coins">0</span></p>
+            <button id="start-btn">PLAY</button>
+            <button id="pvp-btn">⚔️ PVP</button>
+            <button id="upgrades-btn">SHIP UPGRADES</button>
+            <button id="levels-btn">SELECT LEVEL</button>
+            <div class="controls">
+                <p><strong>WASD</strong> or <strong>Arrow Keys</strong> - Move</p>
+                <p><strong>SPACE</strong> or <strong>Click</strong> - Shoot</p>
+                <p><strong>P</strong> - Pause</p>
+            </div>
+        </div>
+
+        <div id="shop-screen" class="screen hidden">
+            <h1>🛒 TIME SHOP</h1>
+            <p class="subtitle">Wave Complete! Choose your upgrades:</p>
+            <p class="shop-coins">💰 Your Coins: <span id="shop-coin-display">0</span></p>
+            <div id="shop-items"></div>
+            <button id="next-wave-btn">NEXT WAVE →</button>
+        </div>
+
+        <div id="game-over-screen" class="screen hidden">
+            <h1>💀 GAME OVER</h1>
+            <p class="subtitle">You were lost in time...</p>
+            <p>Waves Survived: <span id="final-wave">0</span></p>
+            <p>Total Coins: <span id="final-coins">0</span></p>
+            <button id="restart-btn">TRY AGAIN</button>
+        </div>
+
+        <div id="pause-screen" class="screen hidden">
+            <h1>⏸️ PAUSED</h1>
+            <button id="resume-btn">RESUME</button>
+        </div>
+
+        <div id="upgrade-screen" class="screen hidden">
+            <h1>🔧 SHIP UPGRADES</h1>
+            <p class="subtitle">Spend coins to permanently upgrade your ship!</p>
+            <p class="shop-coins">💰 Total Coins: <span id="upgrade-coins">0</span></p>
+            <div id="upgrade-items"></div>
+            <button id="back-from-upgrades">BACK</button>
+        </div>
+
+        <div id="level-screen" class="screen hidden">
+            <h1>🗺️ SELECT LEVEL</h1>
+            <p class="subtitle">Choose a level to play:</p>
+            <div id="level-items"></div>
+            <button id="back-from-levels">BACK</button>
+        </div>
+
+        <div id="pvp-screen" class="screen hidden">
+            <h1>⚔️ PLAYER VS PLAYER</h1>
+            <p class="subtitle">Fight your friend!</p>
+            <div class="pvp-controls">
+                <div class="player-controls">
+                    <h3 style="color: #00ffff;">🔵 PLAYER 1</h3>
+                    <p><strong>W/S</strong> - Forward/Backward</p>
+                    <p><strong>A/D</strong> - Rotate Left/Right</p>
+                    <p><strong>SPACE</strong> - Shoot</p>
+                </div>
+                <div class="player-controls">
+                    <h3 style="color: #ff00ff;">🟣 PLAYER 2</h3>
+                    <p><strong>I/K</strong> - Forward/Backward</p>
+                    <p><strong>J/L</strong> - Rotate Left/Right</p>
+                    <p><strong>;</strong> (semicolon) - Shoot</p>
+                </div>
+            </div>
+            <button id="start-pvp-btn">START FIGHT!</button>
+            <button id="back-from-pvp">BACK</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

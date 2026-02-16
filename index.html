@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jonah's Games</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(180deg, #0a0a0f 0%, #1a0a2e 100%);
+            font-family: 'Press Start 2P', monospace;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #ff00ff;
+            text-shadow: 0 0 20px rgba(255, 0, 255, 0.8),
+                         4px 4px 0px #00ffff;
+            margin: 40px 0 20px 0;
+            animation: flicker 0.1s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 1; }
+            100% { opacity: 0.95; }
+        }
+
+        .subtitle {
+            color: #00ffff;
+            font-size: 16px;
+            margin-bottom: 50px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .game-card {
+            background: rgba(255, 0, 255, 0.1);
+            border: 3px solid #ff00ff;
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+            text-decoration: none;
+            display: block;
+        }
+
+        .game-card:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.6);
+            background: rgba(255, 0, 255, 0.2);
+        }
+
+        .game-title {
+            font-size: 24px;
+            color: #ff00ff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+        }
+
+        .game-description {
+            color: #aaa;
+            font-size: 12px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .play-button {
+            background: linear-gradient(180deg, #ff00ff, #990099);
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            font-size: 14px;
+            font-family: 'Press Start 2P', monospace;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+            transition: all 0.3s;
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        .game-card:hover .play-button {
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+            transform: scale(1.1);
+        }
+
+        .more-coming {
+            margin-top: 60px;
+            padding: 40px;
+            border: 3px dashed #00ffff;
+            border-radius: 15px;
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        .more-coming h2 {
+            color: #00ffff;
+            font-size: 20px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .more-coming p {
+            color: #888;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding: 20px;
+            color: #666;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        .stars {
+            color: #ffff00;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="stars">⭐✨🎮✨⭐</div>
+
+        <h1>JONAH'S GAMES</h1>
+        <p class="subtitle">Welcome to my game collection!</p>
+
+        <div class="games-grid">
+            <!-- Game 1: Spacetime -->
+            <a href="spacetime/index.html" class="game-card">
+                <div class="game-title">🚀 SPACETIME</div>
+                <p class="game-description">
+                    A time-traveling space shooter! Fight through 7 levels,
+                    defeat bosses, collect powerups, and upgrade your ship.
+                    Play solo or battle friends in PVP mode!
+                </p>
+                <button class="play-button">PLAY NOW</button>
+            </a>
+        </div>
+
+        <div class="more-coming">
+            <h2>🎮 MORE GAMES COMING SOON!</h2>
+            <p>
+                I'm always working on new games!<br>
+                Check back soon for more awesome games!
+            </p>
+        </div>
+
+        <footer>
+            Made with ❤️ by Jonah<br>
+            Powered by Claude Code
+        </footer>
+    </div>
+</body>
+</html>
