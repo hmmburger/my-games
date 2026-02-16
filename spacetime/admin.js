@@ -1,6 +1,6 @@
 // Admin Panel Logic
 const ADMIN_PASSWORD = 'NoMoreHackers';
-let isLoggedIn = false;
+window.adminLoggedIn = window.adminLoggedIn || false;
 let allScores = [];
 
 // Check if already logged in (session storage)
@@ -16,7 +16,7 @@ function attemptLogin() {
     const password = passwordInput.value;
 
     if (password === ADMIN_PASSWORD) {
-        isLoggedIn = true;
+        window.adminLoggedIn = true;
         sessionStorage.setItem('adminLoggedIn', 'true');
         passwordInput.value = '';
         showAdminPanel();
