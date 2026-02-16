@@ -1,3 +1,6 @@
+console.log('🔥 AUTH.JS LOADING!');
+alert('🔥 auth.js is running!'); // DEBUG - remove this later!
+
 // Firebase Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBiKZFuPPnJhOck1LGweKnjLmsjKSLldPg",
@@ -23,8 +26,17 @@ const SUBMISSION_COOLDOWN = 60000; // 60 seconds
 
 // Listen for auth state changes
 auth.onAuthStateChanged((user) => {
+    console.log('=== AUTH STATE CHANGED ===');
+    console.log('User:', user);
     currentUser = user;
     updateAuthUI();
+    // Check for gifted coins when user logs in
+    if (user) {
+        console.log('User is logged in, checking for gifts...');
+        checkForGiftedCoins();
+    } else {
+        console.log('No user logged in');
+    }
 });
 
 function updateAuthUI() {
@@ -316,5 +328,59 @@ async function claimGiftedCoins(uid) {
     } catch (error) {
         console.error('Error claiming gift:', error);
         return { success: false, amount: 0 };
+    }
+}
+
+// Check for gifted coins (when user logs in)
+async function checkForGiftedCoins() {
+    console.log('🎁 checkForGiftedCoins() called!');
+    const user = auth.currentUser;
+
+    if (!user) {
+        console.log('❌ No user found, skipping gift check');
+        return;
+    }
+
+    try {
+        console.log('🔍 Checking Firebase for gifted coins...');
+        console.log('User UID:', user.uid);
+
+        const result = await claimGiftedCoins(user.uid);
+        console.log('Claim result:', result);
+
+        if (result.success && result.amount !== 0) {
+            console.log('✅ Found gifted coins:', result.amount);
+
+            // Get current total coins from localStorage
+            let totalCoins = parseInt(localStorage.getItem('spacetime_coins')) || 0;
+            console.log('Current coins before gift:', totalCoins);
+
+            // Add or subtract coins from total
+            totalCoins += result.amount;
+
+            // Don't let total go below 0
+            if (totalCoins < 0) totalCoins = 0;
+
+            localStorage.setItem('spacetime_coins', totalCoins);
+            console.log('New total coins:', totalCoins);
+
+            // Update UI if elements exist
+            const totalCoinsEl = document.getElementById('total-coins');
+            if (totalCoinsEl) {
+                totalCoinsEl.textContent = totalCoins;
+                console.log('Updated UI with new coin total');
+            }
+
+            // Show notification
+            if (result.amount > 0) {
+                alert(`🎁 You received ${result.amount} gifted coins! Enjoy! 💰`);
+            } else {
+                alert(`💸 ${Math.abs(result.amount)} coins were removed from your account!`);
+            }
+        } else {
+            console.log('ℹ️ No gifted coins found for this user');
+        }
+    } catch (error) {
+        console.error('❌ Failed to check for gifts:', error);
     }
 }
