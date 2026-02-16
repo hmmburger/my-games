@@ -1,6 +1,3 @@
-console.log('🔥 AUTH.JS LOADING!');
-alert('🔥 auth.js is running!'); // DEBUG - remove this later!
-
 // Firebase Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBiKZFuPPnJhOck1LGweKnjLmsjKSLldPg",
