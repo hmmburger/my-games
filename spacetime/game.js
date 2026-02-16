@@ -73,6 +73,7 @@ window.onload = function() {
     ctx = canvas.getContext('2d');
 
     setupEventListeners();
+    loadBroadcastMessage();
     updateMainMenu();
     gameLoop();
 };
@@ -1510,4 +1511,18 @@ function drawBuffs() {
 
         x += 75;
     });
+}
+
+// Load broadcast message from admin
+async function loadBroadcastMessage() {
+    try {
+        const message = await getBroadcastMessage();
+        if (message) {
+            const broadcastDiv = document.getElementById('broadcast-display');
+            broadcastDiv.textContent = '📢 ' + message;
+            broadcastDiv.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Failed to load broadcast:', error);
+    }
 }

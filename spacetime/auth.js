@@ -140,6 +140,13 @@ async function submitScore(coins, waves) {
         return { success: false, message: 'You must be logged in to submit scores!' };
     }
 
+    // Check if user is banned
+    const username = currentUser.displayName || 'Anonymous';
+    const banCheck = await checkIfBanned(username.toLowerCase());
+    if (banCheck.isBanned) {
+        return { success: false, message: 'You are banned from submitting scores!' };
+    }
+
     // Rate limiting check
     const now = Date.now();
     if (now - lastSubmissionTime < SUBMISSION_COOLDOWN) {
@@ -264,4 +271,29 @@ function isLoggedIn() {
 // Helper: Get current username
 function getCurrentUsername() {
     return currentUser ? (currentUser.displayName || 'Anonymous') : null;
+}
+
+// Check if user is banned
+async function checkIfBanned(identifier) {
+    try {
+        const snapshot = await database.ref('banned/' + identifier).once('value');
+        return { isBanned: snapshot.exists() };
+    } catch (error) {
+        console.error('Ban check error:', error);
+        return { isBanned: false };
+    }
+}
+
+// Get broadcast message
+async function getBroadcastMessage() {
+    try {
+        const snapshot = await database.ref('broadcast').once('value');
+        if (snapshot.exists() && snapshot.val().active) {
+            return snapshot.val().message;
+        }
+        return null;
+    } catch (error) {
+        console.error('Error fetching broadcast:', error);
+        return null;
+    }
 }

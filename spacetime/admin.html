@@ -200,6 +200,171 @@
             font-size: 20px;
             color: #ffff00;
         }
+
+        .admin-actions {
+            margin: 20px 0;
+        }
+
+        .action-section {
+            background: rgba(0, 255, 255, 0.1);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .action-title {
+            font-size: 14px;
+            color: #00ffff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .action-inputs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .action-inputs input,
+        .action-inputs select {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px;
+            font-size: 10px;
+            font-family: 'Press Start 2P', monospace;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #00ffff;
+            border-radius: 8px;
+            color: #fff;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            font-size: 10px;
+            font-family: 'Press Start 2P', monospace;
+            background: linear-gradient(180deg, #00ffff, #009999);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+        }
+
+        .action-btn.danger {
+            background: linear-gradient(180deg, #ff0000, #990000);
+            color: #fff;
+        }
+
+        .action-btn.success {
+            background: linear-gradient(180deg, #00ff00, #009900);
+            color: #000;
+        }
+
+        .banned-list {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .banned-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0000;
+            border-radius: 5px;
+            font-size: 10px;
+        }
+
+        .edit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .edit-modal.active {
+            display: flex;
+        }
+
+        .edit-content {
+            background: rgba(255, 0, 255, 0.1);
+            border: 3px solid #ff00ff;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .edit-content h2 {
+            color: #ff00ff;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .edit-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 12px;
+            font-family: 'Press Start 2P', monospace;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #ff00ff;
+            border-radius: 8px;
+            color: #fff;
+        }
+
+        .edit-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .edit-buttons button {
+            flex: 1;
+            padding: 12px;
+            font-size: 10px;
+            font-family: 'Press Start 2P', monospace;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .message-status {
+            font-size: 10px;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .message-status.success {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+        }
+
+        .message-status.error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #ff0000;
+            color: #ff0000;
+        }
     </style>
 </head>
 <body>
@@ -230,12 +395,72 @@
                     <div class="stat-value" id="high-score">0</div>
                 </div>
             </div>
+        </div>
 
+        <!-- Admin Actions -->
+        <div class="admin-actions">
+            <!-- Broadcast Message -->
+            <div class="action-section">
+                <div class="action-title">📢 BROADCAST MESSAGE</div>
+                <div class="action-inputs">
+                    <input type="text" id="broadcast-message" placeholder="Enter announcement message..." maxlength="200">
+                </div>
+                <button class="action-btn" onclick="broadcastMessage()">📡 SEND TO ALL PLAYERS</button>
+                <div id="broadcast-status" class="message-status"></div>
+            </div>
+
+            <!-- Add Fake Score -->
+            <div class="action-section">
+                <div class="action-title">🤖 ADD FAKE SCORE (for testing)</div>
+                <div class="action-inputs">
+                    <input type="text" id="fake-username" placeholder="Username" maxlength="20">
+                    <input type="number" id="fake-coins" placeholder="Coins" min="0" max="10000">
+                    <input type="number" id="fake-waves" placeholder="Waves" min="1" max="100">
+                </div>
+                <button class="action-btn success" onclick="addFakeScore()">➕ ADD SCORE</button>
+                <div id="fake-status" class="message-status"></div>
+            </div>
+
+            <!-- Ban Player -->
+            <div class="action-section">
+                <div class="action-title">🚫 BAN/UNBAN PLAYER</div>
+                <div class="action-inputs">
+                    <input type="text" id="ban-username" placeholder="Username or UID to ban..." maxlength="50">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="action-btn danger" onclick="banPlayer()">🔨 BAN PLAYER</button>
+                    <button class="action-btn" onclick="unbanPlayer()">🔓 UNBAN PLAYER</button>
+                    <button class="action-btn" onclick="loadBannedList()">📋 VIEW BANNED LIST</button>
+                </div>
+                <div id="ban-status" class="message-status"></div>
+                <div id="banned-list" class="banned-list"></div>
+            </div>
+        </div>
+
+        <div class="admin-container">
             <div id="loading" class="loading">Loading scores...</div>
             <div id="scores-list"></div>
         </div>
 
         <button class="back-btn" onclick="window.location.href='index.html'">← BACK TO GAME</button>
+    </div>
+
+    <!-- Edit Score Modal -->
+    <div id="edit-modal" class="edit-modal">
+        <div class="edit-content">
+            <h2>✏️ EDIT SCORE</h2>
+            <input type="hidden" id="edit-score-key">
+            <label style="font-size: 10px; color: #888;">Username:</label>
+            <input type="text" id="edit-username" maxlength="20">
+            <label style="font-size: 10px; color: #888;">Coins:</label>
+            <input type="number" id="edit-coins" min="0" max="10000">
+            <label style="font-size: 10px; color: #888;">Waves:</label>
+            <input type="number" id="edit-waves" min="1" max="100">
+            <div class="edit-buttons">
+                <button class="action-btn success" onclick="saveEditedScore()">💾 SAVE</button>
+                <button class="action-btn danger" onclick="closeEditModal()">❌ CANCEL</button>
+            </div>
+        </div>
     </div>
 
     <!-- Firebase SDK -->

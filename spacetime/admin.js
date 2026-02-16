@@ -156,3 +156,260 @@ function formatDate(timestamp) {
     const date = new Date(timestamp);
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 }
+
+// ========== ADMIN POWERS ==========
+
+// Broadcast Message
+async function broadcastMessage() {
+    const messageInput = document.getElementById('broadcast-message');
+    const statusDiv = document.getElementById('broadcast-status');
+    const message = messageInput.value.trim();
+
+    if (!message) {
+        showStatus('broadcast-status', 'Please enter a message!', 'error');
+        return;
+    }
+
+    try {
+        await database.ref('broadcast').set({
+            message: message,
+            timestamp: Date.now(),
+            active: true
+        });
+
+        messageInput.value = '';
+        showStatus('broadcast-status', '✅ Message broadcasted to all players!', 'success');
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            statusDiv.style.display = 'none';
+        }, 5000);
+    } catch (error) {
+        showStatus('broadcast-status', '❌ Failed to broadcast: ' + error.message, 'error');
+    }
+}
+
+// Add Fake Score
+async function addFakeScore() {
+    const username = document.getElementById('fake-username').value.trim();
+    const coins = parseInt(document.getElementById('fake-coins').value);
+    const waves = parseInt(document.getElementById('fake-waves').value);
+
+    if (!username || isNaN(coins) || isNaN(waves)) {
+        showStatus('fake-status', '❌ Please fill all fields!', 'error');
+        return;
+    }
+
+    if (waves < 1) {
+        showStatus('fake-status', '❌ Waves must be at least 1!', 'error');
+        return;
+    }
+
+    if (coins > 10000) {
+        showStatus('fake-status', '❌ Max 10,000 coins!', 'error');
+        return;
+    }
+
+    try {
+        const fakeUid = 'fake_' + Date.now();
+        const scoreData = {
+            username: username,
+            coins: coins,
+            waves: waves,
+            timestamp: Date.now(),
+            uid: fakeUid
+        };
+
+        await database.ref('scores').push(scoreData);
+
+        // Clear inputs
+        document.getElementById('fake-username').value = '';
+        document.getElementById('fake-coins').value = '';
+        document.getElementById('fake-waves').value = '';
+
+        showStatus('fake-status', '✅ Fake score added! Refreshing...', 'success');
+
+        // Reload scores
+        setTimeout(() => {
+            loadAllScores();
+            document.getElementById('fake-status').style.display = 'none';
+        }, 1500);
+    } catch (error) {
+        showStatus('fake-status', '❌ Failed: ' + error.message, 'error');
+    }
+}
+
+// Ban Player
+async function banPlayer() {
+    const identifier = document.getElementById('ban-username').value.trim();
+
+    if (!identifier) {
+        showStatus('ban-status', '❌ Please enter username or UID!', 'error');
+        return;
+    }
+
+    try {
+        // Add to banned list
+        await database.ref('banned/' + identifier.toLowerCase()).set({
+            identifier: identifier,
+            timestamp: Date.now(),
+            reason: 'Banned by admin'
+        });
+
+        document.getElementById('ban-username').value = '';
+        showStatus('ban-status', '✅ Player banned!', 'success');
+
+        setTimeout(() => {
+            document.getElementById('ban-status').style.display = 'none';
+        }, 3000);
+    } catch (error) {
+        showStatus('ban-status', '❌ Failed: ' + error.message, 'error');
+    }
+}
+
+// Unban Player
+async function unbanPlayer() {
+    const identifier = document.getElementById('ban-username').value.trim();
+
+    if (!identifier) {
+        showStatus('ban-status', '❌ Please enter username or UID!', 'error');
+        return;
+    }
+
+    try {
+        await database.ref('banned/' + identifier.toLowerCase()).remove();
+
+        document.getElementById('ban-username').value = '';
+        showStatus('ban-status', '✅ Player unbanned!', 'success');
+
+        setTimeout(() => {
+            document.getElementById('ban-status').style.display = 'none';
+        }, 3000);
+    } catch (error) {
+        showStatus('ban-status', '❌ Failed: ' + error.message, 'error');
+    }
+}
+
+// Load Banned List
+async function loadBannedList() {
+    const bannedListDiv = document.getElementById('banned-list');
+
+    try {
+        const snapshot = await database.ref('banned').once('value');
+
+        if (!snapshot.exists()) {
+            bannedListDiv.innerHTML = '<div style="color: #888; text-align: center; padding: 20px;">No banned players</div>';
+            return;
+        }
+
+        let html = '';
+        snapshot.forEach((childSnapshot) => {
+            const ban = childSnapshot.val();
+            const date = new Date(ban.timestamp).toLocaleDateString();
+            html += `
+                <div class="banned-item">
+                    <div>
+                        <strong>${escapeHtml(ban.identifier)}</strong><br>
+                        <span style="color: #888;">Banned: ${date}</span>
+                    </div>
+                    <button class="delete-btn" onclick="unbanPlayerByName('${ban.identifier}')">UNBAN</button>
+                </div>
+            `;
+        });
+
+        bannedListDiv.innerHTML = html;
+    } catch (error) {
+        bannedListDiv.innerHTML = '<div style="color: #ff0000; text-align: center;">Failed to load banned list</div>';
+    }
+}
+
+// Unban by name (helper for list)
+async function unbanPlayerByName(identifier) {
+    if (confirm(`Unban ${identifier}?`)) {
+        await database.ref('banned/' + identifier.toLowerCase()).remove();
+        loadBannedList(); // Refresh list
+    }
+}
+
+// Edit Score
+function openEditModal(scoreKey) {
+    const score = allScores.find(s => s.key === scoreKey);
+    if (!score) return;
+
+    document.getElementById('edit-score-key').value = scoreKey;
+    document.getElementById('edit-username').value = score.username;
+    document.getElementById('edit-coins').value = score.coins;
+    document.getElementById('edit-waves').value = score.waves;
+
+    document.getElementById('edit-modal').classList.add('active');
+}
+
+function closeEditModal() {
+    document.getElementById('edit-modal').classList.remove('active');
+}
+
+async function saveEditedScore() {
+    const scoreKey = document.getElementById('edit-score-key').value;
+    const username = document.getElementById('edit-username').value.trim();
+    const coins = parseInt(document.getElementById('edit-coins').value);
+    const waves = parseInt(document.getElementById('edit-waves').value);
+
+    if (!username || isNaN(coins) || isNaN(waves)) {
+        alert('Please fill all fields!');
+        return;
+    }
+
+    if (coins < 0 || coins > 10000) {
+        alert('Coins must be between 0 and 10,000!');
+        return;
+    }
+
+    if (waves < 1) {
+        alert('Waves must be at least 1!');
+        return;
+    }
+
+    try {
+        await database.ref('scores/' + scoreKey).update({
+            username: username,
+            coins: coins,
+            waves: waves
+        });
+
+        closeEditModal();
+        loadAllScores(); // Refresh
+    } catch (error) {
+        alert('Failed to save: ' + error.message);
+    }
+}
+
+// Update displayScores to add edit button
+const originalDisplayScores = displayScores;
+displayScores = function(scores) {
+    originalDisplayScores(scores);
+
+    // Add edit buttons to each score
+    scores.forEach((score) => {
+        const scoreElement = document.getElementById('score-' + score.key);
+        if (scoreElement) {
+            const deleteBtn = scoreElement.querySelector('.delete-btn');
+            if (deleteBtn) {
+                const editBtn = document.createElement('button');
+                editBtn.className = 'delete-btn';
+                editBtn.style.marginRight = '10px';
+                editBtn.style.background = 'linear-gradient(180deg, #00ff00, #009900)';
+                editBtn.textContent = '✏️ EDIT';
+                editBtn.onclick = () => openEditModal(score.key);
+                deleteBtn.parentNode.insertBefore(editBtn, deleteBtn);
+            }
+        }
+    });
+};
+
+// Helper: Show status message
+function showStatus(elementId, message, type) {
+    const statusDiv = document.getElementById(elementId);
+    statusDiv.textContent = message;
+    statusDiv.className = 'message-status ' + type;
+    statusDiv.style.display = 'block';
+}
