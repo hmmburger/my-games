@@ -81,13 +81,17 @@ window.onload = function() {
 function setupEventListeners() {
     // Keyboard
     document.addEventListener('keydown', (e) => {
-        keys[e.key.toLowerCase()] = true;
-        if (e.key === 'p' || e.key === 'P') {
-            togglePause();
+        if (e.key) {
+            keys[e.key.toLowerCase()] = true;
+            if (e.key === 'p' || e.key === 'P') {
+                togglePause();
+            }
         }
     });
     document.addEventListener('keyup', (e) => {
-        keys[e.key.toLowerCase()] = false;
+        if (e.key) {
+            keys[e.key.toLowerCase()] = false;
+        }
     });
 
     // Mouse tracking
