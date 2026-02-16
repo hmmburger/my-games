@@ -405,7 +405,10 @@
                 <div class="action-inputs">
                     <input type="text" id="broadcast-message" placeholder="Enter announcement message..." maxlength="200">
                 </div>
-                <button class="action-btn" onclick="broadcastMessage()">📡 SEND TO ALL PLAYERS</button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="action-btn" onclick="broadcastMessage()">📡 SEND TO ALL PLAYERS</button>
+                    <button class="action-btn danger" onclick="clearBroadcast()">🗑️ CLEAR BROADCAST</button>
+                </div>
                 <div id="broadcast-status" class="message-status"></div>
             </div>
 

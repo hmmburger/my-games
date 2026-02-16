@@ -189,6 +189,24 @@ async function broadcastMessage() {
     }
 }
 
+// Clear Broadcast
+async function clearBroadcast() {
+    if (!confirm('Remove the broadcast message?')) {
+        return;
+    }
+
+    try {
+        await database.ref('broadcast').remove();
+        showStatus('broadcast-status', '✅ Broadcast cleared!', 'success');
+
+        setTimeout(() => {
+            document.getElementById('broadcast-status').style.display = 'none';
+        }, 3000);
+    } catch (error) {
+        showStatus('broadcast-status', '❌ Failed to clear: ' + error.message, 'error');
+    }
+}
+
 // Add Fake Score
 async function addFakeScore() {
     const username = document.getElementById('fake-username').value.trim();
