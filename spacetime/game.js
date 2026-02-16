@@ -74,6 +74,7 @@ window.onload = function() {
 
     setupEventListeners();
     loadBroadcastMessage();
+    checkForGiftedCoins();
     updateMainMenu();
     gameLoop();
 };
@@ -1533,5 +1534,28 @@ async function loadBroadcastMessage() {
         }
     } catch (error) {
         console.error('Failed to load broadcast:', error);
+    }
+}
+
+// Check for gifted coins
+async function checkForGiftedCoins() {
+    const user = firebase.auth().currentUser;
+
+    if (!user) return;
+
+    try {
+        const result = await claimGiftedCoins(user.uid);
+
+        if (result.success && result.amount > 0) {
+            // Add gifted coins to total
+            totalCoins += result.amount;
+            localStorage.setItem('spacetime_coins', totalCoins);
+            document.getElementById('total-coins').textContent = totalCoins;
+
+            // Show notification
+            alert(`🎁 You received ${result.amount} gifted coins! Enjoy! 💰`);
+        }
+    } catch (error) {
+        console.error('Failed to check for gifts:', error);
     }
 }
