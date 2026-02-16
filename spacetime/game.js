@@ -1525,6 +1525,11 @@ async function loadBroadcastMessage() {
             const broadcastDiv = document.getElementById('broadcast-display');
             broadcastDiv.textContent = '📢 ' + message;
             broadcastDiv.style.display = 'block';
+
+            // Hide after 5 seconds
+            setTimeout(() => {
+                broadcastDiv.style.display = 'none';
+            }, 5000);
         }
     } catch (error) {
         console.error('Failed to load broadcast:', error);
