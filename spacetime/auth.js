@@ -303,7 +303,7 @@ async function claimGiftedCoins(uid) {
     try {
         const snapshot = await database.ref('users/' + uid + '/giftBalance').once('value');
 
-        if (snapshot.exists() && snapshot.val() > 0) {
+        if (snapshot.exists() && snapshot.val() !== 0) {
             const amount = snapshot.val();
 
             // Clear the gift balance

@@ -435,6 +435,17 @@
                 <div id="gift-status" class="message-status"></div>
             </div>
 
+            <!-- Remove Coins -->
+            <div class="action-section">
+                <div class="action-title">💸 REMOVE COINS FROM PLAYER</div>
+                <div class="action-inputs">
+                    <input type="text" id="remove-username" placeholder="Username" maxlength="20">
+                    <input type="number" id="remove-amount" placeholder="Amount" min="1" max="10000">
+                </div>
+                <button class="action-btn danger" onclick="removeCoins()">💸 REMOVE COINS</button>
+                <div id="remove-status" class="message-status"></div>
+            </div>
+
             <!-- Ban Player -->
             <div class="action-section">
                 <div class="action-title">🚫 BAN/UNBAN PLAYER</div>

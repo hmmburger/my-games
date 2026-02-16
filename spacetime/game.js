@@ -1546,14 +1546,22 @@ async function checkForGiftedCoins() {
     try {
         const result = await claimGiftedCoins(user.uid);
 
-        if (result.success && result.amount > 0) {
-            // Add gifted coins to total
+        if (result.success && result.amount !== 0) {
+            // Add or subtract coins from total
             totalCoins += result.amount;
+
+            // Don't let total go below 0
+            if (totalCoins < 0) totalCoins = 0;
+
             localStorage.setItem('spacetime_coins', totalCoins);
             document.getElementById('total-coins').textContent = totalCoins;
 
             // Show notification
-            alert(`🎁 You received ${result.amount} gifted coins! Enjoy! 💰`);
+            if (result.amount > 0) {
+                alert(`🎁 You received ${result.amount} gifted coins! Enjoy! 💰`);
+            } else {
+                alert(`💸 ${Math.abs(result.amount)} coins were removed from your account!`);
+            }
         }
     } catch (error) {
         console.error('Failed to check for gifts:', error);

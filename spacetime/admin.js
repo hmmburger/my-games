@@ -305,6 +305,54 @@ async function giftCoins() {
     }
 }
 
+// Remove Coins from Player
+async function removeCoins() {
+    const username = document.getElementById('remove-username').value.trim();
+    const amount = parseInt(document.getElementById('remove-amount').value);
+
+    if (!username || isNaN(amount)) {
+        showStatus('remove-status', '❌ Please fill all fields!', 'error');
+        return;
+    }
+
+    if (amount < 1 || amount > 10000) {
+        showStatus('remove-status', '❌ Amount must be between 1 and 10,000!', 'error');
+        return;
+    }
+
+    try {
+        // First, find the user's UID by username
+        const snapshot = await database.ref('usernames').orderByChild('username').equalTo(username).once('value');
+
+        if (!snapshot.exists()) {
+            showStatus('remove-status', '❌ Player not found!', 'error');
+            return;
+        }
+
+        let userUid = null;
+        snapshot.forEach((child) => {
+            userUid = child.val().uid;
+        });
+
+        // Add negative coins to user's gift balance (will subtract when claimed)
+        await database.ref('users/' + userUid + '/giftBalance').transaction((balance) => {
+            return (balance || 0) - amount;
+        });
+
+        // Clear inputs
+        document.getElementById('remove-username').value = '';
+        document.getElementById('remove-amount').value = '';
+
+        showStatus('remove-status', `✅ Removed ${amount} coins from ${username}!`, 'success');
+
+        setTimeout(() => {
+            document.getElementById('remove-status').style.display = 'none';
+        }, 3000);
+    } catch (error) {
+        showStatus('remove-status', '❌ Failed: ' + error.message, 'error');
+    }
+}
+
 // Ban Player
 async function banPlayer() {
     const identifier = document.getElementById('ban-username').value.trim();
