@@ -1001,6 +1001,11 @@ function nextWave() {
 
 function gameOver() {
     gameState = 'gameover';
+
+    // Save earned coins to total
+    totalCoins += coins;
+    localStorage.setItem('spacetime_coins', totalCoins);
+
     document.getElementById('final-wave').textContent = wavesCompleted;
     document.getElementById('final-coins').textContent = totalCoins;
     showScreen('game-over-screen');
