@@ -1,6 +1,6 @@
 // Firebase Configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBiKZFuPPnJhOck1LGweKnjLmsjKSLldPg",
+    apiKey: "YOUR_API_KEY_HERE",
     authDomain: "leaderboard-spacetime.firebaseapp.com",
     databaseURL: "https://leaderboard-spacetime-default-rtdb.firebaseio.com",
     projectId: "leaderboard-spacetime",
