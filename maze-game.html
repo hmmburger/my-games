@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Maze</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+        .info {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        #gameCanvas {
+            border: 4px solid white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            background: #1a1a2e;
+        }
+        .controls {
+            margin-top: 20px;
+            font-size: 1rem;
+            text-align: center;
+            opacity: 0.8;
+        }
+        .win-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            padding: 40px 60px;
+            border-radius: 20px;
+            font-size: 2rem;
+            display: none;
+            text-align: center;
+            border: 3px solid #00ff88;
+        }
+        .win-message.show {
+            display: block;
+        }
+        button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background: #00ff88;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #00cc6a;
+        }
+        .level-selector {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .level-selector select {
+            padding: 8px 15px;
+            font-size: 1rem;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+        }
+        .level-selector select option {
+            background: #1a1a2e;
+            color: white;
+        }
+        .scoreboard {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(255,255,255,0.3);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .scoreboard h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: #00ff88;
+            text-align: center;
+        }
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-size: 0.9rem;
+        }
+        .score-item.level-current {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        .score-item.no-score {
+            opacity: 0.5;
+        }
+        .name-input-container {
+            margin-top: 15px;
+            display: none;
+        }
+        .name-input-container.show {
+            display: block;
+        }
+        .name-input {
+            padding: 10px 15px;
+            font-size: 1.1rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #00ff88;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .name-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+        .save-score-btn {
+            background: #ffcc00;
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+        .save-score-btn:hover {
+            background: #e6b800;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 SLIDE MAZE</h1>
+    <div class="level-selector">
+        <label for="levelSelect">Level: </label>
+        <select id="levelSelect" onchange="selectLevel(this.value)">
+            <option value="1">Level 1</option>
+            <option value="2">Level 2</option>
+            <option value="3">Level 3</option>
+            <option value="4">Level 4</option>
+            <option value="5">Level 5</option>
+            <option value="6">Level 6</option>
+            <option value="7">Level 7</option>
+            <option value="8">Level 8</option>
+            <option value="9">Level 9</option>
+            <option value="10">Level 10</option>
+        </select>
+    </div>
+    <div class="info">Time: <span id="timer">0.0</span>s | Best: <span id="highscore">--</span>s</div>
+    <canvas id="gameCanvas" width="600" height="600"></canvas>
+    <div class="controls">Use WASD to move • You'll slide until you hit a wall or intersection!</div>
+
+    <div class="scoreboard">
+        <h3>🏆 High Scores</h3>
+        <div id="scoreboardList"></div>
+    </div>
+
+    <div class="win-message" id="winMessage">
+        <div>🎉 YOU WIN! 🎉</div>
+        <div id="newHighScore" style="color: #ffcc00; display: none; font-size: 1.8rem; margin-top: 5px;">⭐ NEW HIGH SCORE! ⭐</div>
+        <div style="font-size: 1.5rem; margin-top: 10px;">Time: <span id="finalTime">0</span>s</div>
+        <div class="name-input-container" id="nameInputContainer">
+            <input type="text" class="name-input" id="nameInput" placeholder="Enter your name!" maxlength="15">
+            <button class="save-score-btn" onclick="saveScore()">Save Score</button>
+        </div>
+        <button id="nextLevelBtn" onclick="nextLevel()">Next Level →</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const CELL_SIZE = 40;
+        const COLS = canvas.width / CELL_SIZE;
+        const ROWS = canvas.height / CELL_SIZE;
+
+        let maze = [];
+        let player = { x: 0, y: 0 };
+        let goal = { x: COLS - 1, y: ROWS - 1 };
+        let startTime = Date.now();
+        let gameWon = false;
+        let level = 1;
+        let isMoving = false;
+        let highScores = JSON.parse(localStorage.getItem('mazeHighScores')) || {};
+        let seed = 1;
+        let pendingScoreTime = null;
+
+        // Seeded random number generator
+        function seededRandom() {
+            const x = Math.sin(seed++) * 10000;
+            return x - Math.floor(x);
+        }
+
+        // Reset seed for level generation
+        function resetSeed() {
+            seed = level * 1000;
+        }
+
+        // Generate maze using recursive backtracking
+        function generateMaze() {
+            resetSeed();
+            // Initialize all walls
+            maze = [];
+            for (let y = 0; y < ROWS; y++) {
+                maze[y] = [];
+                for (let x = 0; x < COLS; x++) {
+                    maze[y][x] = {
+                        visited: false,
+                        walls: { top: true, right: true, bottom: true, left: true }
+                    };
+                }
+            }
+
+            // Recursive backtracking with more branching
+            function carve(x, y) {
+                maze[y][x].visited = true;
+
+                const directions = [
+                    { dx: 0, dy: -1, wall: 'top', opposite: 'bottom' },
+                    { dx: 1, dy: 0, wall: 'right', opposite: 'left' },
+                    { dx: 0, dy: 1, wall: 'bottom', opposite: 'top' },
+                    { dx: -1, dy: 0, wall: 'left', opposite: 'right' }
+                ];
+
+                // Shuffle directions for randomness
+                directions.sort(() => seededRandom() - 0.5);
+
+                // Try all directions
+                for (let dir of directions) {
+                    const nx = x + dir.dx;
+                    const ny = y + dir.dy;
+
+                    if (nx >= 0 && nx < COLS && ny >= 0 && ny < ROWS && !maze[ny][nx].visited) {
+                        maze[y][x].walls[dir.wall] = false;
+                        maze[ny][nx].walls[dir.opposite] = false;
+                        carve(nx, ny);
+                    }
+                }
+            }
+
+            // Add extra dead ends by carving short branches
+            function addDeadEnds() {
+                const deadEndCount = 8; // Number of extra dead ends to add
+
+                for (let i = 0; i < deadEndCount; i++) {
+                    // Pick a random cell
+                    const x = Math.floor(Math.random() * COLS);
+                    const y = Math.floor(Math.random() * ROWS);
+
+                    // Try to add a wall to create a dead end
+                    const directions = [
+                        { dx: 0, dy: -1, wall: 'top', opposite: 'bottom' },
+                        { dx: 1, dy: 0, wall: 'right', opposite: 'left' },
+                        { dx: 0, dy: 1, wall: 'bottom', opposite: 'top' },
+                        { dx: -1, dy: 0, wall: 'left', opposite: 'right' }
+                    ];
+
+                    const dir = directions[Math.floor(Math.random() * directions.length)];
+                    const nx = x + dir.dx;
+                    const ny = y + dir.dy;
+
+                    // If neighbor exists, add a wall between them
+                    if (nx >= 0 && nx < COLS && ny >= 0 && ny < ROWS) {
+                        maze[y][x].walls[dir.wall] = true;
+                        maze[ny][nx].walls[dir.opposite] = true;
+                    }
+                }
+            }
+
+            carve(0, 0);
+
+            // Add extra routes by removing random walls
+            function addExtraRoutes() {
+                const extraRoutesCount = 3; // Number of extra paths to add
+
+                for (let i = 0; i < extraRoutesCount; i++) {
+                    const x = Math.floor(seededRandom() * COLS);
+                    const y = Math.floor(seededRandom() * ROWS);
+
+                    const directions = [
+                        { dx: 1, dy: 0, wall: 'right', opposite: 'left' },
+                        { dx: 0, dy: 1, wall: 'bottom', opposite: 'top' }
+                    ];
+
+                    const dir = directions[Math.floor(seededRandom() * directions.length)];
+                    const nx = x + dir.dx;
+                    const ny = y + dir.dy;
+
+                    if (nx >= 0 && nx < COLS && ny >= 0 && ny < ROWS) {
+                        maze[y][x].walls[dir.wall] = false;
+                        maze[ny][nx].walls[dir.opposite] = false;
+                    }
+                }
+            }
+
+            addExtraRoutes();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw maze walls
+            ctx.strokeStyle = '#4a4a6a';
+            ctx.lineWidth = 3;
+
+            for (let y = 0; y < ROWS; y++) {
+                for (let x = 0; x < COLS; x++) {
+                    const cell = maze[y][x];
+                    const px = x * CELL_SIZE;
+                    const py = y * CELL_SIZE;
+
+                    if (cell.walls.top) {
+                        ctx.beginPath();
+                        ctx.moveTo(px, py);
+                        ctx.lineTo(px + CELL_SIZE, py);
+                        ctx.stroke();
+                    }
+                    if (cell.walls.right) {
+                        ctx.beginPath();
+                        ctx.moveTo(px + CELL_SIZE, py);
+                        ctx.lineTo(px + CELL_SIZE, py + CELL_SIZE);
+                        ctx.stroke();
+                    }
+                    if (cell.walls.bottom) {
+                        ctx.beginPath();
+                        ctx.moveTo(px, py + CELL_SIZE);
+                        ctx.lineTo(px + CELL_SIZE, py + CELL_SIZE);
+                        ctx.stroke();
+                    }
+                    if (cell.walls.left) {
+                        ctx.beginPath();
+                        ctx.moveTo(px, py);
+                        ctx.lineTo(px, py + CELL_SIZE);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // Draw goal
+            ctx.fillStyle = '#00ff88';
+            ctx.fillRect(goal.x * CELL_SIZE + 5, goal.y * CELL_SIZE + 5, CELL_SIZE - 10, CELL_SIZE - 10);
+
+            // Draw player
+            ctx.fillStyle = '#ff6b6b';
+            ctx.beginPath();
+            ctx.arc(
+                player.x * CELL_SIZE + CELL_SIZE / 2,
+                player.y * CELL_SIZE + CELL_SIZE / 2,
+                CELL_SIZE / 3,
+                0,
+                Math.PI * 2
+            );
+            ctx.fill();
+        }
+
+        function canMoveFrom(x, y, dx, dy) {
+            const newX = x + dx;
+            const newY = y + dy;
+
+            if (newX < 0 || newX >= COLS || newY < 0 || newY >= ROWS) return false;
+
+            const cell = maze[y][x];
+
+            if (dy === -1 && cell.walls.top) return false;
+            if (dx === 1 && cell.walls.right) return false;
+            if (dy === 1 && cell.walls.bottom) return false;
+            if (dx === -1 && cell.walls.left) return false;
+
+            return true;
+        }
+
+        function countAvailableDirections(x, y) {
+            let count = 0;
+            if (canMoveFrom(x, y, 0, -1)) count++;
+            if (canMoveFrom(x, y, 0, 1)) count++;
+            if (canMoveFrom(x, y, -1, 0)) count++;
+            if (canMoveFrom(x, y, 1, 0)) count++;
+            return count;
+        }
+
+        function slide(dx, dy) {
+            if (gameWon || isMoving) return;
+
+            isMoving = true;
+
+            function step() {
+                if (!canMoveFrom(player.x, player.y, dx, dy)) {
+                    isMoving = false;
+                    return;
+                }
+
+                player.x += dx;
+                player.y += dy;
+                draw();
+
+                if (player.x === goal.x && player.y === goal.y) {
+                    isMoving = false;
+                    win();
+                    return;
+                }
+
+                // Check if we should stop (intersection or more than 1 way to go)
+                const directions = countAvailableDirections(player.x, player.y);
+                if (directions > 2 || (directions === 2 && !canMoveFrom(player.x, player.y, -dx, -dy))) {
+                    // At an intersection or corner (not just going straight)
+                    isMoving = false;
+                    return;
+                }
+
+                // Continue sliding
+                setTimeout(step, 50);
+            }
+
+            step();
+        }
+
+        function win() {
+            gameWon = true;
+            const finalTime = parseFloat(((Date.now() - startTime) / 1000).toFixed(2));
+            document.getElementById('finalTime').textContent = finalTime.toFixed(2);
+
+            // Check for new high score
+            const isNewHighScore = !highScores[level] || finalTime < (highScores[level].time || Infinity);
+            if (isNewHighScore) {
+                pendingScoreTime = finalTime;
+                document.getElementById('newHighScore').style.display = 'block';
+                document.getElementById('nameInputContainer').classList.add('show');
+                document.getElementById('nextLevelBtn').style.display = 'none';
+                document.getElementById('nameInput').focus();
+            } else {
+                pendingScoreTime = null;
+                document.getElementById('newHighScore').style.display = 'none';
+                document.getElementById('nameInputContainer').classList.remove('show');
+                document.getElementById('nextLevelBtn').style.display = 'inline-block';
+            }
+
+            document.getElementById('winMessage').classList.add('show');
+        }
+
+        function saveScore() {
+            const nameInput = document.getElementById('nameInput');
+            const name = nameInput.value.trim() || 'Anonymous';
+
+            highScores[level] = {
+                time: pendingScoreTime,
+                name: name
+            };
+            localStorage.setItem('mazeHighScores', JSON.stringify(highScores));
+
+            document.getElementById('nameInputContainer').classList.remove('show');
+            document.getElementById('nextLevelBtn').style.display = 'inline-block';
+            nameInput.value = '';
+            updateScoreboard();
+        }
+
+        function nextLevel() {
+            level++;
+            document.getElementById('levelSelect').value = Math.min(level, 10);
+            document.getElementById('winMessage').classList.remove('show');
+            document.getElementById('nameInputContainer').classList.remove('show');
+            document.getElementById('nextLevelBtn').style.display = 'inline-block';
+            player = { x: 0, y: 0 };
+            startTime = Date.now();
+            gameWon = false;
+            generateMaze();
+            draw();
+            updateHighScoreDisplay();
+        }
+
+        function updateHighScoreDisplay() {
+            const best = highScores[level];
+            document.getElementById('highscore').textContent = best ? best.time.toFixed(2) : '--';
+            updateScoreboard();
+        }
+
+        function updateScoreboard() {
+            const scoreboardList = document.getElementById('scoreboardList');
+            scoreboardList.innerHTML = '';
+
+            for (let i = 1; i <= 10; i++) {
+                const scoreItem = document.createElement('div');
+                scoreItem.className = 'score-item' + (i === level ? ' level-current' : '');
+
+                const score = highScores[i];
+                if (score) {
+                    scoreItem.innerHTML = `<span>Level ${i}</span><span>${score.time.toFixed(2)}s - ${score.name}</span>`;
+                } else {
+                    scoreItem.innerHTML = `<span>Level ${i}</span><span>--</span>`;
+                    scoreItem.classList.add('no-score');
+                }
+
+                scoreboardList.appendChild(scoreItem);
+            }
+        }
+
+        function selectLevel(newLevel) {
+            level = parseInt(newLevel);
+            document.getElementById('levelSelect').value = level;
+            document.getElementById('winMessage').classList.remove('show');
+            document.getElementById('nameInputContainer').classList.remove('show');
+            document.getElementById('nextLevelBtn').style.display = 'inline-block';
+            player = { x: 0, y: 0 };
+            startTime = Date.now();
+            gameWon = false;
+            generateMaze();
+            draw();
+            updateHighScoreDisplay();
+        }
+
+        function updateTimer() {
+            if (!gameWon) {
+                const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+                document.getElementById('timer').textContent = elapsed;
+            }
+            requestAnimationFrame(updateTimer);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            switch (e.key.toLowerCase()) {
+                case 'w': slide(0, -1); break;
+                case 's': slide(0, 1); break;
+                case 'a': slide(-1, 0); break;
+                case 'd': slide(1, 0); break;
+            }
+        });
+
+        // Start game
+        generateMaze();
+        draw();
+        updateTimer();
+        updateHighScoreDisplay();
+    </script>
+</body>
+</html>
