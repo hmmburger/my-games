@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCG Price Tracker - Pokemon Card Values</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>TCG Price Tracker</h1>
+                <span class="subtitle">Pokemon Card Values & Flip Opportunities</span>
+            </div>
+            <nav class="nav">
+                <button class="nav-btn active" data-section="trending">Trending</button>
+                <button class="nav-btn" data-section="search">Search</button>
+                <button class="nav-btn" data-section="browse">Browse Sets</button>
+                <button class="nav-btn" data-section="flip-finder">Flip Finder</button>
+                <button class="nav-btn" data-section="watchlist">Watchlist</button>
+            </nav>
+        </header>
+
+        <!-- Trending Section -->
+        <section id="trending" class="section active">
+            <h2>🔥 Hot Cards Right Now</h2>
+            <div class="card-grid" id="trending-cards">
+                <div class="loading">Loading trending cards...</div>
+            </div>
+        </section>
+
+        <!-- Search Section -->
+        <section id="search" class="section">
+            <h2>🔍 Search Cards</h2>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search for a Pokemon card..." class="search-input">
+                <div class="filters">
+                    <select id="filter-grade" class="filter-select">
+                        <option value="">All Grades</option>
+                        <option value="psa10">PSA 10</option>
+                        <option value="psa9">PSA 9</option>
+                        <option value="psa8">PSA 8</option>
+                        <option value="ungraded">Ungraded</option>
+                    </select>
+                    <select id="filter-price" class="filter-select">
+                        <option value="">Any Price</option>
+                        <option value="0-50">Under $50</option>
+                        <option value="50-100">$50 - $100</option>
+                        <option value="100-500">$100 - $500</option>
+                        <option value="500+">$500+</option>
+                    </select>
+                    <select id="filter-set" class="filter-select">
+                        <option value="">All Sets</option>
+                    </select>
+                    <button id="search-btn" class="btn-primary">Search</button>
+                </div>
+            </div>
+            <div class="card-grid" id="search-results"></div>
+        </section>
+
+        <!-- Browse Section -->
+        <section id="browse" class="section">
+            <h2>📚 Browse by Set</h2>
+            <div class="sets-grid" id="sets-grid">
+                <div class="loading">Loading card sets...</div>
+            </div>
+        </section>
+
+        <!-- Flip Finder Section -->
+        <section id="flip-finder" class="section">
+            <h2>💰 Flip Opportunities</h2>
+            <p class="section-desc">Cards where buying ungraded and getting them graded could make you profit!</p>
+            <div class="flip-filters">
+                <label>
+                    Min Profit: $<input type="number" id="min-profit" value="50" min="0" step="10">
+                </label>
+                <label>
+                    Grading Cost: $<input type="number" id="grading-cost" value="30" min="0" step="5">
+                </label>
+                <button id="update-flip-btn" class="btn-primary">Update</button>
+            </div>
+            <div class="card-grid" id="flip-results">
+                <div class="loading">Loading flip opportunities...</div>
+            </div>
+        </section>
+
+        <!-- Watchlist Section -->
+        <section id="watchlist" class="section">
+            <h2>⭐ Your Watchlist</h2>
+            <p class="section-desc">Track cards you're interested in</p>
+            <div class="card-grid" id="watchlist-results">
+                <p class="empty-state">No cards in your watchlist yet. Click the heart icon on any card to add it!</p>
+            </div>
+        </section>
+
+        <!-- Card Detail Modal -->
+        <div id="card-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modal-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scraper.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

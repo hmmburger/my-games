@@ -1,0 +1,383 @@
+[
+  {
+    "id": "xy12-11",
+    "name": "Charizard",
+    "set": "Evolutions",
+    "setNumber": "11",
+    "imageUrl": "https://images.pokemontcg.io/xy12/11_hires.png",
+    "rarity": "Rare Holo",
+    "prices": {
+      "ungraded": 20,
+      "psa9": 80,
+      "psa10": 400
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "150",
+    "artist": "Mitsuhiro Arita",
+    "tcgUrl": "https://pokemontcg.io/xy12-11"
+  },
+  {
+    "id": "sm115-9",
+    "name": "Charizard-GX",
+    "set": "Hidden Fates",
+    "setNumber": "9",
+    "imageUrl": "https://images.pokemontcg.io/sm115/9_hires.png",
+    "rarity": "Rare Holo GX",
+    "prices": {
+      "ungraded": 20,
+      "psa9": 80,
+      "psa10": 400
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "250",
+    "artist": "aky CG Works",
+    "tcgUrl": "https://pokemontcg.io/sm115-9"
+  },
+  {
+    "id": "base6-3",
+    "name": "Charizard",
+    "set": "Legendary Collection",
+    "setNumber": "3",
+    "imageUrl": "https://images.pokemontcg.io/base6/3_hires.png",
+    "rarity": "Rare Holo",
+    "prices": {
+      "ungraded": 20,
+      "psa9": 80,
+      "psa10": 400
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "120",
+    "artist": "Mitsuhiro Arita",
+    "tcgUrl": "https://pokemontcg.io/base6-3"
+  },
+  {
+    "id": "ex16-6",
+    "name": "Charizard",
+    "set": "Power Keepers",
+    "setNumber": "6",
+    "imageUrl": "https://images.pokemontcg.io/ex16/6_hires.png",
+    "rarity": "Rare Holo",
+    "prices": {
+      "ungraded": 20,
+      "psa9": 80,
+      "psa10": 400
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "120",
+    "artist": "Ken Sugimori",
+    "tcgUrl": "https://pokemontcg.io/ex16-6"
+  },
+  {
+    "id": "xy2-12",
+    "name": "Charizard-EX",
+    "set": "Flashfire",
+    "setNumber": "12",
+    "imageUrl": "https://images.pokemontcg.io/xy2/12_hires.png",
+    "rarity": "Rare Holo EX",
+    "prices": {
+      "ungraded": 20,
+      "psa9": 80,
+      "psa10": 400
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "180",
+    "artist": "PLANETA",
+    "tcgUrl": "https://pokemontcg.io/xy2-12"
+  },
+  {
+    "id": "base5-4",
+    "name": "Dark Charizard",
+    "set": "Team Rocket",
+    "setNumber": "4",
+    "imageUrl": "https://images.pokemontcg.io/base5/4_hires.png",
+    "rarity": "Rare Holo",
+    "prices": {
+      "ungraded": 100,
+      "psa9": 400,
+      "psa10": 2000
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "80",
+    "artist": "Ken Sugimori",
+    "tcgUrl": "https://pokemontcg.io/base5-4"
+  },
+  {
+    "id": "xy12-12",
+    "name": "Charizard-EX",
+    "set": "Evolutions",
+    "setNumber": "12",
+    "imageUrl": "https://images.pokemontcg.io/xy12/12_hires.png",
+    "rarity": "Rare Holo EX",
+    "prices": {
+      "ungraded": 20,
+      "psa9": 80,
+      "psa10": 400
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "180",
+    "artist": "PLANETA",
+    "tcgUrl": "https://pokemontcg.io/xy12-12"
+  },
+  {
+    "id": "dp3-3",
+    "name": "Charizard",
+    "set": "Secret Wonders",
+    "setNumber": "3",
+    "imageUrl": "https://images.pokemontcg.io/dp3/3_hires.png",
+    "rarity": "Rare Holo",
+    "prices": {
+      "ungraded": 20,
+      "psa9": 80,
+      "psa10": 400
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "130",
+    "artist": "Daisuke Ito",
+    "tcgUrl": "https://pokemontcg.io/dp3-3"
+  },
+  {
+    "id": "xy2-11",
+    "name": "Charizard-EX",
+    "set": "Flashfire",
+    "setNumber": "11",
+    "imageUrl": "https://images.pokemontcg.io/xy2/11_hires.png",
+    "rarity": "Rare Holo EX",
+    "prices": {
+      "ungraded": 20,
+      "psa9": 80,
+      "psa10": 400
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "180",
+    "artist": "Eske Yoshinob",
+    "tcgUrl": "https://pokemontcg.io/xy2-11"
+  },
+  {
+    "id": "det1-5",
+    "name": "Charizard",
+    "set": "Detective Pikachu",
+    "setNumber": "5",
+    "imageUrl": "https://images.pokemontcg.io/det1/5_hires.png",
+    "rarity": "Rare Ultra",
+    "prices": {
+      "ungraded": 60,
+      "psa9": 240,
+      "psa10": 1200
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "180",
+    "artist": "Framestore",
+    "tcgUrl": "https://pokemontcg.io/det1-5"
+  },
+  {
+    "id": "ecard1-6",
+    "name": "Charizard",
+    "set": "Expedition Base Set",
+    "setNumber": "6",
+    "imageUrl": "https://images.pokemontcg.io/ecard1/6_hires.png",
+    "rarity": "Rare Holo",
+    "prices": {
+      "ungraded": 200,
+      "psa9": 800,
+      "psa10": 4000
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "120",
+    "artist": "Hiromichi Sugiyama",
+    "tcgUrl": "https://pokemontcg.io/ecard1-6"
+  },
+  {
+    "id": "xy2-13",
+    "name": "M Charizard-EX",
+    "set": "Flashfire",
+    "setNumber": "13",
+    "imageUrl": "https://images.pokemontcg.io/xy2/13_hires.png",
+    "rarity": "Rare Holo EX",
+    "prices": {
+      "ungraded": 20,
+      "psa9": 80,
+      "psa10": 400
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "220",
+    "artist": "5ban Graphics",
+    "tcgUrl": "https://pokemontcg.io/xy2-13"
+  },
+  {
+    "id": "base1-4",
+    "name": "Charizard",
+    "set": "Base",
+    "setNumber": "4",
+    "imageUrl": "https://images.pokemontcg.io/base1/4_hires.png",
+    "rarity": "Rare Holo",
+    "prices": {
+      "ungraded": 200,
+      "psa9": 800,
+      "psa10": 4000
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "120",
+    "artist": "Mitsuhiro Arita",
+    "tcgUrl": "https://pokemontcg.io/base1-4"
+  },
+  {
+    "id": "bw11-19",
+    "name": "Charizard",
+    "set": "Legendary Treasures",
+    "setNumber": "19",
+    "imageUrl": "https://images.pokemontcg.io/bw11/19_hires.png",
+    "rarity": "Rare Holo",
+    "prices": {
+      "ungraded": 20,
+      "psa9": 80,
+      "psa10": 400
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "160",
+    "artist": "TOKIYA",
+    "tcgUrl": "https://pokemontcg.io/bw11-19"
+  },
+  {
+    "id": "base4-4",
+    "name": "Charizard",
+    "set": "Base Set 2",
+    "setNumber": "4",
+    "imageUrl": "https://images.pokemontcg.io/base4/4_hires.png",
+    "rarity": "Rare Holo",
+    "prices": {
+      "ungraded": 200,
+      "psa9": 800,
+      "psa10": 4000
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "120",
+    "artist": "Mitsuhiro Arita",
+    "tcgUrl": "https://pokemontcg.io/base4-4"
+  },
+  {
+    "id": "ex14-4",
+    "name": "Charizard δ",
+    "set": "Crystal Guardians",
+    "setNumber": "4",
+    "imageUrl": "https://images.pokemontcg.io/ex14/4_hires.png",
+    "rarity": "Rare Holo",
+    "prices": {
+      "ungraded": 20,
+      "psa9": 80,
+      "psa10": 400
+    },
+    "types": [
+      "Lightning",
+      "Metal"
+    ],
+    "hp": "120",
+    "artist": "Kouki Saitou",
+    "tcgUrl": "https://pokemontcg.io/ex14-4"
+  },
+  {
+    "id": "gym2-2",
+    "name": "Blaine's Charizard",
+    "set": "Gym Challenge",
+    "setNumber": "2",
+    "imageUrl": "https://images.pokemontcg.io/gym2/2_hires.png",
+    "rarity": "Rare Holo",
+    "prices": {
+      "ungraded": 20,
+      "psa9": 80,
+      "psa10": 400
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "100",
+    "artist": "Ken Sugimori",
+    "tcgUrl": "https://pokemontcg.io/gym2-2"
+  },
+  {
+    "id": "pl4-1",
+    "name": "Charizard",
+    "set": "Arceus",
+    "setNumber": "1",
+    "imageUrl": "https://images.pokemontcg.io/pl4/1_hires.png",
+    "rarity": "Rare Holo",
+    "prices": {
+      "ungraded": 20,
+      "psa9": 80,
+      "psa10": 400
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "140",
+    "artist": "Kagemaru Himeno",
+    "tcgUrl": "https://pokemontcg.io/pl4-1"
+  },
+  {
+    "id": "sm75-3",
+    "name": "Charizard",
+    "set": "Dragon Majesty",
+    "setNumber": "3",
+    "imageUrl": "https://images.pokemontcg.io/sm75/3_hires.png",
+    "rarity": "Rare Holo",
+    "prices": {
+      "ungraded": 20,
+      "psa9": 80,
+      "psa10": 400
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "160",
+    "artist": "Ryota Murayama",
+    "tcgUrl": "https://pokemontcg.io/sm75-3"
+  },
+  {
+    "id": "sm9-14",
+    "name": "Charizard",
+    "set": "Team Up",
+    "setNumber": "14",
+    "imageUrl": "https://images.pokemontcg.io/sm9/14_hires.png",
+    "rarity": "Rare",
+    "prices": {
+      "ungraded": 10,
+      "psa9": 40,
+      "psa10": 200
+    },
+    "types": [
+      "Fire"
+    ],
+    "hp": "150",
+    "artist": "Masakazu Fukuda",
+    "tcgUrl": "https://pokemontcg.io/sm9-14"
+  }
+]
